@@ -1,0 +1,46 @@
+pipeline{
+
+agent any
+
+/*
+agent{
+label "nodename"
+}
+*/
+
+tools{
+	maven "maven-3.8.2"
+}
+
+options{
+timestamps()
+buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5'))
+}
+
+/*
+triggers{
+	// pollSCM('* * * * *')
+	cron('* * * * *')
+	// githubPush()
+}
+*/
+
+stages{
+
+	stage('checkoutCode')
+	{	
+		steps{
+		git branch: 'development', url: 'https://github.com/Sahana-MK/maven-web-application.git'
+		}
+	}
+
+	stage('Build')
+	{	
+		steps{
+		sh "mvn clean package"
+		}
+	}
+	
+}
+
+}
